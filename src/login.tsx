@@ -69,7 +69,7 @@ export default function Login() {
           console.log("ERROR", err);
         });
     }
-  }, []);
+  }, [API]);
 
   return (
     <div className="bg-blue-500 min-h-screen flex items-center justify-center px-4">
