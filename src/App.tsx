@@ -6,6 +6,7 @@ import Userinfo from "./userinfo";
 import { Route, Routes } from "react-router-dom";
 import Forget from "./forget";
 import CallBack from "./callback";
+import ChangePassword from "./changepassword";
 function App() {
   return (
     <div >
@@ -17,6 +18,7 @@ function App() {
         <Route path="/auth" element={<Auth/>}/>
         <Route path="/verify" element={<VerifyOtp/>}/>
         <Route path="/forget" element={<Forget/>}/>
+        <Route path="/changepassword" element={<ChangePassword/>}/>
         <Route path="/auth/google/callback" element={<CallBack/>}/>
       </Routes>
     </div>

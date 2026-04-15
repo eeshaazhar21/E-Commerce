@@ -14,7 +14,7 @@ export default function SetPassword(){
                     <div className="flex justify-center items-center">
                         <Store color="white" className="w-[30%] h-[30%]"/>
                     </div>
-                    <div className="flex justify-center items-center">
+                    <div className="text-center">
                         <p className="text-white font-sans text-4xl font-normal">Login</p>
                     </div>
                 

@@ -2,12 +2,12 @@ import { Store } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { z } from "zod";
-import {signupSchema} from './userschema'
+import { signupSchema } from "./userschema";
 
 type FormData = z.infer<typeof signupSchema>;
 
 export default function Signup() {
-  const [loading,setloading]=useState(false)
+  const [loading, setloading] = useState(false);
   const navigate = useNavigate();
   const API = "http://localhost:8000/api/auth";
 
@@ -35,12 +35,13 @@ export default function Signup() {
   };
 
   const handlesubmit = async () => {
-    setloading(true)
+    setloading(true);
+
     const result = signupSchema.safeParse(form);
 
     if (!result.success) {
-      const fieldErrors = result.error.flatten().fieldErrors;
-      setErrors(fieldErrors);
+      setloading(false);
+      setErrors(result.error.flatten().fieldErrors);
       return;
     }
 
@@ -48,134 +49,150 @@ export default function Signup() {
 
     const res = await fetch(`${API}/signup`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(form),
     });
 
     if (!res.ok) {
       const data = await res.json();
-      setloading(false)
+      setloading(false);
       alert(data.msg);
       return;
     }
-    setloading(false)
+
+    setloading(false);
     alert("Successful Signup");
+
     navigate("/verify", {
-    state: { email: form.email,
-        changepassword: false
-     }
+      state: {
+        email: form.email,
+        changepassword: false,
+      },
     });
   };
 
   return (
-    
-    <div className="bg-blue-500 h-screen flex justify-center items-center">
-        {loading && (
-            <div className="fixed top-0 left-0 w-full z-50">
-                <div className="bg-black/50 text-white text-center py-2">
-                Loading...
-                </div>
-            </div>
-            )}
-      <div className="flex flex-col gap-4 w-[20%]">
+    <div className="bg-blue-500 min-h-screen flex items-center justify-center px-4 py-6">
+
+      {/* Loading bar */}
+      {loading && (
+        <div className="fixed top-0 left-0 w-full z-50">
+          <div className="bg-black/60 text-white text-center py-2 text-sm sm:text-base">
+            Loading...
+          </div>
+        </div>
+      )}
+
+      {/* Card */}
+      <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg bg-white/10 backdrop-blur-md p-5 sm:p-8 rounded-xl shadow-lg flex flex-col gap-4 sm:gap-5">
 
         {/* Logo */}
         <div className="flex justify-center">
-          <Store color="white" />
+          <Store className="text-white w-10 h-10 sm:w-14 sm:h-14" />
         </div>
 
-        <h1 className="text-white text-3xl text-center">Sign Up</h1>
+        {/* Title */}
+        <h1 className="text-center text-white text-2xl sm:text-3xl font-semibold">
+          Sign Up
+        </h1>
 
-        {/* First Name */}
-        <input
-          name="first_name"
-          placeholder="First Name"
-          value={form.first_name}
-          onChange={handleChange}
-          className="p-2 border rounded text-gray-500"
-        />
-        {errors.first_name && (
-          <p className="text-red-300 text-sm">{errors.first_name[0]}</p>
-        )}
+        {/* Inputs */}
+        <div className="flex flex-col gap-2">
+          <input
+            name="first_name"
+            placeholder="First Name"
+            value={form.first_name}
+            onChange={handleChange}
+            className="w-full p-2 rounded border text-gray-700"
+          />
+          {errors.first_name && (
+            <p className="text-red-300 text-sm">{errors.first_name[0]}</p>
+          )}
+        </div>
 
-        {/* Last Name */}
-        <input
-          name="last_name"
-          placeholder="Last Name"
-          value={form.last_name}
-          onChange={handleChange}
-          className="p-2 border rounded text-gray-500"
-        />
-        {errors.last_name && (
-          <p className="text-red-300 text-sm">{errors.last_name[0]}</p>
-        )}
+        <div className="flex flex-col gap-2">
+          <input
+            name="last_name"
+            placeholder="Last Name"
+            value={form.last_name}
+            onChange={handleChange}
+            className="w-full p-2 rounded border text-gray-700"
+          />
+          {errors.last_name && (
+            <p className="text-red-300 text-sm">{errors.last_name[0]}</p>
+          )}
+        </div>
 
-        {/* Email */}
-        <input
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          className="p-2 border rounded text-gray-500"
-        />
-        {errors.email && (
-          <p className="text-red-300 text-sm">{errors.email[0]}</p>
-        )}
+        <div className="flex flex-col gap-2">
+          <input
+            name="email"
+            placeholder="Email"
+            value={form.email}
+            onChange={handleChange}
+            className="w-full p-2 rounded border text-gray-700"
+          />
+          {errors.email && (
+            <p className="text-red-300 text-sm">{errors.email[0]}</p>
+          )}
+        </div>
 
-        {/* Password */}
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          value={form.password}
-          onChange={handleChange}
-          className="p-2 border rounded text-gray-500"
-        />
-        {errors.password && (
-          <p className="text-red-300 text-sm">{errors.password[0]}</p>
-        )}
+        <div className="flex flex-col gap-2">
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            className="w-full p-2 rounded border text-gray-700"
+          />
+          {errors.password && (
+            <p className="text-red-300 text-sm">{errors.password[0]}</p>
+          )}
+        </div>
 
-        {/* Confirm Password */}
-        <input
-          name="confirmpassword"
-          type="password"
-          placeholder="Confirm Password"
-          value={form.confirmpassword}
-          onChange={handleChange}
-          className="p-2 border rounded text-gray-500"
-        />
-        {errors.confirmpassword && (
-          <p className="text-red-300 text-sm">
-            {errors.confirmpassword[0]}
-          </p>
-        )}
+        <div className="flex flex-col gap-2">
+          <input
+            name="confirmpassword"
+            type="password"
+            placeholder="Confirm Password"
+            value={form.confirmpassword}
+            onChange={handleChange}
+            className="w-full p-2 rounded border text-gray-700"
+          />
+          {errors.confirmpassword && (
+            <p className="text-red-300 text-sm">
+              {errors.confirmpassword[0]}
+            </p>
+          )}
+        </div>
 
         {/* Gender */}
-        <div className="text-white">
-          <label>
-            <input
-              type="radio"
-              name="gender"
-              value="Male"
-              checked={form.gender === "Male"}
-              onChange={handleChange}
-            />
-            Male
-          </label>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-white text-sm sm:text-base">
+          <span className="font-medium">Gender:</span>
+          <div className="flex gap-4">
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="gender"
+                value="Male"
+                checked={form.gender === "Male"}
+                onChange={handleChange}
+              />
+              Male
+            </label>
 
-          <label className="ml-4">
-            <input
-              type="radio"
-              name="gender"
-              value="Female"
-              checked={form.gender === "Female"}
-              onChange={handleChange}
-            />
-            Female
-          </label>
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="gender"
+                value="Female"
+                checked={form.gender === "Female"}
+                onChange={handleChange}
+              />
+              Female
+            </label>
+          </div>
         </div>
 
         {errors.gender && (
@@ -183,45 +200,49 @@ export default function Signup() {
         )}
 
         {/* Role */}
-        <div className="text-white">
-          <label>
-            <input
-              type="radio"
-              name="role"
-              value="Admin"
-              checked={form.role === "Admin"}
-              onChange={handleChange}
-            />
-            Admin
-          </label>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-white text-sm sm:text-base">
+          <span className="font-medium">Role:</span>
+          <div className="flex gap-4">
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="role"
+                value="Admin"
+                checked={form.role === "Admin"}
+                onChange={handleChange}
+              />
+              Admin
+            </label>
 
-          <label className="ml-4">
-            <input
-              type="radio"
-              name="role"
-              value="User"
-              checked={form.role === "User"}
-              onChange={handleChange}
-            />
-            User
-          </label>
+            <label className="flex items-center gap-1">
+              <input
+                type="radio"
+                name="role"
+                value="User"
+                checked={form.role === "User"}
+                onChange={handleChange}
+              />
+              User
+            </label>
+          </div>
         </div>
 
         {errors.role && (
           <p className="text-red-300 text-sm">{errors.role[0]}</p>
         )}
 
-        {/* Submit */}
+        {/* Button */}
         <button
           onClick={handlesubmit}
-          className="bg-blue-700 p-2 text-white rounded"
+          className="bg-blue-600 hover:bg-blue-700 transition rounded w-full p-2 text-white font-medium"
         >
-          Submit
+          SUBMIT
         </button>
 
+        {/* Login link */}
         <p className="text-white text-center text-sm">
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-900 underline">
+          <Link to="/login" className="text-blue-200 underline">
             Login
           </Link>
         </p>
