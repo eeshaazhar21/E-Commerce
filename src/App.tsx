@@ -1,24 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
-
+import VerifyOtp from "./verifyotp";
+import Auth from "./auth";
+import Login from "./login";
+import Signup from "./signup";
+import Userinfo from "./userinfo";
+import { Route, Routes } from "react-router-dom";
+import Forget from "./forget";
+import CallBack from "./callback";
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div >
+      <Routes>
+        <Route path="/" element={<Auth/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/signup" element={<Signup/>}/>
+        <Route path="/user" element={<Userinfo/>}/>
+        <Route path="/auth" element={<Auth/>}/>
+        <Route path="/verify" element={<VerifyOtp/>}/>
+        <Route path="/forget" element={<Forget/>}/>
+        <Route path="/auth/google/callback" element={<CallBack/>}/>
+      </Routes>
     </div>
   );
 }
