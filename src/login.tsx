@@ -7,6 +7,7 @@ import axios from "axios";
 export default function Login() {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
+  const [loading,setloading]=useState(false)
   const server=process.env.REACT_APP_SERVER;
   const API = `${server}/api/auth`;
   const navigate = useNavigate();
@@ -14,8 +15,10 @@ export default function Login() {
   const GoogleIcon = FcGoogle as unknown as React.FC<any>;
 
   const handlesubmit = async () => {
+    setloading(true)
     if (!email || !password) {
       alert("Email and Password required");
+      setloading(false)
       return;
     }
 
@@ -30,8 +33,10 @@ export default function Login() {
 
     if (!res.ok) {
       alert("Wrong Email or Password");
+      setloading(false)
     } else {
       alert("Successful login");
+      setloading(false)
       navigate("/user");
     }
   };
@@ -73,6 +78,13 @@ export default function Login() {
 
   return (
     <div className="bg-blue-500 min-h-screen flex items-center justify-center px-4">
+        {loading && (
+            <div className="fixed top-0 left-0 w-full z-50">
+            <div className="bg-black/60 text-white text-center py-2 text-sm sm:text-base">
+                Loading...
+            </div>
+            </div>
+        )}
       <div className="flex flex-col gap-6 sm:gap-7 w-full sm:max-w-sm md:max-w-md lg:max-w-lg bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-xl shadow-lg">
 
         <div className="flex justify-center">
