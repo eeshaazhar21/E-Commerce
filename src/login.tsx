@@ -60,7 +60,7 @@ export default function Login() {
 
     if (code) {
       axios
-        .post("http://localhost:8000/api/auth/google", { code })
+        .post(`${API}/google`, { code })
         .then((res) => {
           console.log(res.data.user);
           localStorage.setItem("user", JSON.stringify(res.data.user));

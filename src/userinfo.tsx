@@ -10,7 +10,7 @@ export default function Userinfo() {
   const [user, setUser] = useState<any>(null);
 
   const handlelogout = async () => {
-    const res = await fetch(`http://localhost:8000/api/auth/logout`, {
+    const res = await fetch(`${API}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
@@ -43,7 +43,7 @@ export default function Userinfo() {
     };
 
     fetchuser();
-  }, []);
+  }, [API]);
 
   if (auth === null) return <div className="text-center mt-10">Loading...</div>;
   if (!auth) return <Navigate to="/login" />;
