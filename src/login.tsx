@@ -42,7 +42,7 @@ export default function Login() {
   };
 
   const signwithgoogle = () => {
-    const redirect_uri = "https://e-commerce-sepia-three-70.vercel.app//auth/google/callback";
+    const redirect_uri = "https://e-commerce-sepia-three-70.vercel.app/auth/google/callback";
     const scope = ["openid", "email", "profile"].join(" ");
     const url = new URL("https://accounts.google.com/o/oauth2/v2/auth");
 
