@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 
 export default function Userinfo() {
+    const [loading, setloading] = useState(false);
   const navigate = useNavigate();
   const server=process.env.REACT_APP_SERVER;
   const API = `${server}/api/users`;
@@ -10,12 +11,14 @@ export default function Userinfo() {
   const [user, setUser] = useState<any>(null);
 
   const handlelogout = async () => {
+    setloading(true)
     const res = await fetch(`${API}/logout`, {
       method: "POST",
       credentials: "include",
     });
 
     if (res.ok) {
+        setloading(false)
       navigate("/login");
     }
   };
@@ -50,6 +53,13 @@ export default function Userinfo() {
 
   return (
     <div className="bg-orange-400 min-h-screen p-4 sm:p-6">
+        {loading && (
+        <div className="fixed top-0 left-0 w-full z-50">
+          <div className="bg-black/60 text-white text-center py-2 text-sm sm:text-base">
+            Loading...
+          </div>
+        </div>
+      )}
       <button
         className="bg-red-500 rounded hover:bg-red-600 text-white px-4 py-2 mb-4"
         onClick={handlelogout}
