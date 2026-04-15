@@ -15,7 +15,7 @@ export default function ChangePassword(){
                                 <Store color="white" className="w-[30%] h-[30%]"/>
                             </div>
                             <div className="flex justify-center items-center">
-                                <p className="text-white font-sans text-4xl font-normal">Login</p>
+                                <p className="text-white font-sans text-4xl font-normal">Change Password</p>
                             </div>
                             <div className="relative">
                                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
