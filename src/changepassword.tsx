@@ -1,6 +1,23 @@
+import { useMutation } from "@tanstack/react-query";
 import { Store, Lock } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+const server=process.env.REACT_APP_SERVER;
+const API = `${server}/api/auth`;
+
+async function changepassword({email,password}:{email:string,password:string}){
+    const res=await fetch(`${API}/changepassword`,
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({email,password})
+        }
+    )
+    return res.json()
+    
+}
 
 export default function ChangePassword() {
   const [password, setpassword] = useState("");
@@ -8,8 +25,11 @@ export default function ChangePassword() {
   const [loading,setloading]=useState(false)
   const location = useLocation();
   const navigate = useNavigate();
-  const server=process.env.REACT_APP_SERVER;
-  const API = `${server}/api/auth`;
+  const {mutate,isPending}=useMutation({mutationFn:changepassword,onSuccess:()=>{
+    alert("Password has been changed");
+    navigate("/login");
+  }})
+  
 
   const email = location.state?.email;
 
@@ -26,34 +46,13 @@ export default function ChangePassword() {
         setloading(false)
         return
     }
-    console.log(email,password)
-    const res=await fetch(`${API}/changepassword`,
-        {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({email,password})
-        }
-    )
-    console.log("GOT API")
-    if (!res.ok) {
-      const data = await res.json();
-      setloading(false);
-      alert(data.msg);
-      return;
-    }
-
-    setloading(false);
-    alert("Password has been changed");
-    navigate("/login");
-    
+    mutate({email,password})
   };
 
   return (
     <div className="bg-blue-500 min-h-screen flex items-center justify-center px-4">
 
-      {loading && (
+      {(isPending||loading) && (
         <div className="fixed top-0 left-0 w-full z-50">
           <div className="bg-black/60 text-white text-center py-2 text-sm sm:text-base">
             Changing Password
