@@ -10,7 +10,7 @@ export default function Userinfo() {
   const [user, setUser] = useState<any>(null);
 
   const handlelogout = async () => {
-    const res = await fetch(`${API}/api/auth/logout`, {
+    const res = await fetch(`${API}/logout`, {
       method: "POST",
       credentials: "include",
     });
