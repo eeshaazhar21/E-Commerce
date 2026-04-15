@@ -12,7 +12,7 @@ export default function Userinfo() {
 
   const handlelogout = async () => {
     setloading(true)
-    const res = await fetch(`${API}/logout`, {
+    const res = await fetch(`${server}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
