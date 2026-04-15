@@ -7,7 +7,8 @@ import axios from "axios";
 export default function Login() {
   const [email, setemail] = useState("");
   const [password, setpassword] = useState("");
-  const API = "http://localhost:8000/api/auth";
+  const server=process.env.REACT_APP_SERVER;
+  const API = `${server}/api/auth`;
   const navigate = useNavigate();
 
   const GoogleIcon = FcGoogle as unknown as React.FC<any>;

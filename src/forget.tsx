@@ -7,7 +7,8 @@ export default function Forget() {
   const [email, setemail] = useState("");
   const [loading, setloading] = useState(false);
 
-  const API = "http://localhost:8000/api/auth";
+  const server=process.env.REACT_APP_SERVER;
+  const API = `${server}/api/auth`;
 
   const handlesubmit = async () => {
     setloading(true);

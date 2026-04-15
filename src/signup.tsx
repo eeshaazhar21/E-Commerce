@@ -9,7 +9,8 @@ type FormData = z.infer<typeof signupSchema>;
 export default function Signup() {
   const [loading, setloading] = useState(false);
   const navigate = useNavigate();
-  const API = "http://localhost:8000/api/auth";
+  const server=process.env.REACT_APP_SERVER;
+  const API = `${server}/api/auth`;
 
   const [form, setForm] = useState<FormData>({
     first_name: "",

@@ -8,7 +8,8 @@ export default function ChangePassword() {
   const [loading,setloading]=useState(false)
   const location = useLocation();
   const navigate = useNavigate();
-  const API = "http://localhost:8000/api/auth";
+  const server=process.env.REACT_APP_SERVER;
+  const API = `${server}/api/auth`;
 
   const email = location.state?.email;
 

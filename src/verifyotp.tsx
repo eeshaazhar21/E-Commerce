@@ -21,7 +21,8 @@ export default function VerifyOtp() {
       vari = "forget";
     }
 
-    const API = "http://localhost:8000/api/auth";
+    const server=process.env.REACT_APP_SERVER;
+    const API = `${server}/api/auth`;
 
     const res = await fetch(`${API}/${vari}`, {
       method: "POST",
