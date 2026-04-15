@@ -1,59 +1,42 @@
-import { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useNavigate, Navigate } from "react-router-dom";
+const server=process.env.REACT_APP_SERVER;
+const API = `${server}/api/users`;
+async function fetchusers(){
+    const res = await fetch(`${API}/user`, {
+        credentials: "include",
+    });
 
-export default function Userinfo() {
-    const [loading, setloading] = useState(false);
-  const navigate = useNavigate();
-  const server=process.env.REACT_APP_SERVER;
-  const API = `${server}/api/users`;
+    return res.json();
 
-  const [auth, setauth] = useState<boolean | null>(null);
-  const [user, setUser] = useState<any>(null);
 
-  const handlelogout = async () => {
-    setloading(true)
+}
+
+async function logout(){
     const res = await fetch(`${server}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
+    return res.json()
 
-    if (res.ok) {
-        setloading(false)
+}
+
+export default function Userinfo() {
+
+  const navigate = useNavigate();
+
+  const {data:user,isLoading,isError:geterror}=useQuery({queryKey: ["user"],queryFn:fetchusers})
+  const {mutate: mutatelogout,isPending,isSuccess}=useMutation({mutationFn:logout})
+
+  if (isLoading) return <div className="text-center mt-10">Loading...</div>;
+  if (geterror) return <Navigate to="/login" />;
+  if (isSuccess) {
       navigate("/login");
     }
-  };
-
-  useEffect(() => {
-    const fetchuser = async () => {
-      try {
-        const res = await fetch(`${API}/user`, {
-          credentials: "include",
-        });
-
-        if (!res.ok) {
-          const data = await res.json();
-          alert(data.msg);
-          setauth(false);
-          return;
-        }
-
-        const data = await res.json();
-        setUser(data);
-        setauth(true);
-      } catch {
-        setauth(false);
-      }
-    };
-
-    fetchuser();
-  }, [API]);
-
-  if (auth === null) return <div className="text-center mt-10">Loading...</div>;
-  if (!auth) return <Navigate to="/login" />;
 
   return (
     <div className="bg-orange-400 min-h-screen p-4 sm:p-6">
-        {loading && (
+        {(isLoading||isPending) && (
         <div className="fixed top-0 left-0 w-full z-50">
           <div className="bg-black/60 text-white text-center py-2 text-sm sm:text-base">
             Loading...
@@ -62,7 +45,7 @@ export default function Userinfo() {
       )}
       <button
         className="bg-red-500 rounded hover:bg-red-600 text-white px-4 py-2 mb-4"
-        onClick={handlelogout}
+        onClick={()=>mutatelogout()}
       >
         Logout
       </button>

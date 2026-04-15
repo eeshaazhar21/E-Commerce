@@ -1,18 +1,17 @@
+import { useMutation} from "@tanstack/react-query";
 import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
-export default function VerifyOtp() {
-  const location = useLocation();
-  const navigate = useNavigate();
+async function verifyotp({
+  otp,
+  email,
+  changepassword,
+}: {
+  otp: string;
+  email: string;
+  changepassword: boolean;
+}){
 
-  const email = location.state?.email;
-  const changepassword = location.state?.changepassword;
-
-  const [otp, setotp] = useState("");
-  const [loading, setloading] = useState(false);
-
-  const handlesubmit = async () => {
-    setloading(true)
     let vari;
 
     if (changepassword === false) {
@@ -33,15 +32,21 @@ export default function VerifyOtp() {
       body: JSON.stringify({ email, otp }),
     });
 
-    if (!res.ok) {
-      const data = await res.json();
-      setloading(false)
-      alert(data.msg);
-      return;
-    }
-    setloading(false)
-    alert("Successful Verification");
+    return res.json()
+}
 
+export default function VerifyOtp() {
+  const navigate = useNavigate();
+  const location=useLocation()
+  const email = location.state?.email;
+  const changepassword = location.state?.changepassword;
+  
+  
+
+  const [otp, setotp] = useState("");
+
+  const {mutate,isPending,}=useMutation({mutationFn:verifyotp,onSuccess:()=>{
+    alert("Successful Verification");
     if (!changepassword) {
       navigate("/login");
     }
@@ -53,12 +58,12 @@ export default function VerifyOtp() {
       },
     });
     }
-  };
+  }})
 
   return (
     <div className="bg-blue-500 min-h-screen flex items-center justify-center px-4">
 
-      {loading && (
+      {isPending && (
         <div className="fixed top-0 left-0 w-full z-50">
           <div className="bg-black/60 text-white text-center py-2 text-sm sm:text-base">
             Loading...
@@ -67,12 +72,10 @@ export default function VerifyOtp() {
       )}
       <div className="w-full max-w-sm sm:max-w-md bg-white/10 backdrop-blur-md p-5 sm:p-8 rounded-xl shadow-lg flex flex-col gap-5">
 
-        {/* Title */}
         <h1 className="text-center text-white text-2xl sm:text-3xl font-semibold">
           Verify Email
         </h1>
 
-        {/* Email info */}
         <p className="text-white text-sm sm:text-base text-center leading-relaxed">
           OTP has been sent to:
           <br />
@@ -81,7 +84,6 @@ export default function VerifyOtp() {
           </span>
         </p>
 
-        {/* OTP input */}
         <div className="flex justify-center">
           <input
             type="text"
@@ -92,15 +94,13 @@ export default function VerifyOtp() {
           />
         </div>
 
-        {/* Verify button */}
         <button
-          onClick={handlesubmit}
+          onClick={()=>mutate({otp,email,changepassword})}
           className="bg-blue-600 hover:bg-blue-700 transition rounded w-full p-2 sm:p-3 text-white font-medium"
         >
           Verify
         </button>
 
-        {/* Links */}
         <div className="flex flex-col gap-2 text-center text-sm">
 
           <p className="text-white">

@@ -4,21 +4,18 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom';
-import { Auth0Provider } from "@auth0/auth0-react";
+import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
+const client=new QueryClient()
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Auth0Provider
-      domain="dev-6y5ffq4cwuaeyr77.us.auth0.com"
-      clientId="y4XDJjfQr4ZoBOJCzB2c3unCvAtfYSSO"
-      authorizationParams={{ redirect_uri: window.location.origin }}
-      >
+      <QueryClientProvider client={client}>
+        <App/>
+      </QueryClientProvider>
         
-          <App/>
-      </Auth0Provider>
       
     </BrowserRouter>
     
